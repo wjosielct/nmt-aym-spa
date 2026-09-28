@@ -1,0 +1,19 @@
+# Direct runtime dependencies for nmt-aym-spa.
+#
+# Validated with Python 3.10.21.
+# The end-to-end validation environment used PyTorch 2.5.1+cu121
+# with CUDA 12.1 on an NVIDIA GeForce RTX 2050.
+#
+# For GPU use, install a PyTorch build compatible with the CUDA stack
+# available on your target system. The generic package pin below preserves
+# the validated PyTorch API version without forcing a specific CUDA wheel.
+
+beautifulsoup4==4.15.0
+curl_cffi==0.16.3
+numpy==2.2.6
+pandas==2.3.3
+pdfplumber==0.11.10
+PyYAML==6.0.3
+sacrebleu==2.6.0
+sentencepiece==0.2.2
+torch==2.5.1

@@ -1,0 +1,430 @@
+# ==============================================================================
+# GLOBAL CONFIGURATION & EXPERIMENT
+# ==============================================================================
+
+data_split_seed: 1989
+
+# Default single-run values.
+# These remain useful for smoke tests and direct calls to low-level modules.
+experiment_seed: 123
+src: "aym"
+tgt: "spa"
+
+# Final experimental grid.
+experiment_seeds:
+  - 111
+  - 222
+  - 333
+
+experiment_directions:
+  - src: "aym"
+    tgt: "spa"
+
+  - src: "spa"
+    tgt: "aym"
+
+experiment_architectures:
+  - encoder_layers: 4
+    decoder_layers: 4
+
+  - encoder_layers: 6
+    decoder_layers: 2
+
+  - encoder_layers: 2
+    decoder_layers: 6
+
+deterministic_training: true
+
+
+# ==============================================================================
+# PATHS AND DIRECTORIES
+# ==============================================================================
+raw_bible_data_dir: "data/raw/bible"
+raw_pdf_dir: "data/raw/book"
+interim_data_dir: "data/interim"
+clean_data_dir: "data/clean"
+splits_dir: "data/splits"
+tokenizer_dir: "tokenizer"
+tokenized_dir: "data/tokenized"
+models_dir: "models"
+results_dir: "results"
+
+
+# ==============================================================================
+# BIBLICAL CORPUS
+# ==============================================================================
+bibles:
+  - code: 293
+    lang: aym
+
+  - code: 2250
+    lang: aym
+
+  - code: 4278
+    lang: spa
+
+  - code: 146
+    lang: spa
+
+
+# ==============================================================================
+# PREPROCESSING & LENGTH FILTERING
+# ==============================================================================
+min_words_bible: 2
+min_words_book: 1
+max_words: 70
+max_ratio: 3.5
+
+
+# ==============================================================================
+# DATASET SPLITS
+# ==============================================================================
+bible_train_ratio: 0.90
+bible_val_ratio: 0.05
+bible_test_ratio: 0.05
+
+book_train_ratio: 0.70
+book_val_ratio: 0.15
+book_test_ratio: 0.15
+
+
+# ==============================================================================
+# TOKENIZER (SentencePiece)
+# ==============================================================================
+vocab_size: 8000
+model_type: "bpe"
+character_coverage: 1.0
+
+# SentencePiece policy:
+# - trained exclusively on train_bible.tsv
+# - user-defined symbols: 0123456789/
+# - split_digits=True
+# These choices are fixed in 8_train_tokenizer.py.
+
+
+# ==============================================================================
+# TRANSFORMER STRUCTURE
+# ==============================================================================
+# These structural parameters define the model architecture and therefore
+# remain shared between base training and subsequent fine-tuning.
+d_model: 256
+n_heads: 8
+encoder_layers: 4
+decoder_layers: 4
+dim_feedforward: 1024
+
+# Architectural capacity limit, not the generation limit.
+positional_encoding_max_len: 1000
+
+
+# ==============================================================================
+# BASE TRAINING — BIBLICAL CORPUS
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Training duration
+# ------------------------------------------------------------------------------
+base_epochs: 150
+
+# ------------------------------------------------------------------------------
+# Mini-batching
+# ------------------------------------------------------------------------------
+base_batch_size_cuda: 64
+base_batch_size_cpu: 32
+base_shuffle_train: true
+base_drop_last: false
+
+# ------------------------------------------------------------------------------
+# Transformer regularization
+# ------------------------------------------------------------------------------
+base_dropout: 0.2
+
+# ------------------------------------------------------------------------------
+# Parameter initialization
+# ------------------------------------------------------------------------------
+base_weight_init: "xavier_uniform"
+
+# ------------------------------------------------------------------------------
+# Optimizer
+# ------------------------------------------------------------------------------
+base_optimizer: "adamw"
+
+# With OneCycleLR, this is max_lr rather than the first-step LR.
+base_max_learning_rate: 0.0005
+
+base_adam_beta1: 0.9
+base_adam_beta2: 0.98
+base_adam_eps: 1.0e-9
+base_weight_decay: 0.0001
+
+# ------------------------------------------------------------------------------
+# Loss / gradients
+# ------------------------------------------------------------------------------
+base_label_smoothing: 0.1
+base_grad_clip_norm: 1.0
+
+# ------------------------------------------------------------------------------
+# Learning-rate scheduler
+# ------------------------------------------------------------------------------
+base_scheduler: "onecycle"
+base_scheduler_pct_start: 0.1
+base_scheduler_anneal_strategy: "cos"
+base_scheduler_div_factor: 25.0
+base_scheduler_final_div_factor: 10000.0
+base_scheduler_three_phase: false
+base_scheduler_cycle_momentum: true
+base_scheduler_base_momentum: 0.85
+base_scheduler_max_momentum: 0.95
+
+# ------------------------------------------------------------------------------
+# Mixed precision / DataLoader
+# ------------------------------------------------------------------------------
+base_amp_enabled: true
+base_num_workers: 0
+base_pin_memory: true
+
+
+# ==============================================================================
+# VALIDATION DURING BASE TRAINING
+# ==============================================================================
+# Teacher-forced validation loss is computed every epoch.
+# Greedy BLEU/chrF++ is computed periodically and on the final epoch.
+base_val_metric_interval_epochs: 10
+base_val_max_len: 150
+base_checkpoint_metric: "chrf++"
+
+
+# ==============================================================================
+# BASE MODEL — FINAL TEST EVALUATION
+# ==============================================================================
+# Used by evaluate_base.py / 12_run_base_evaluation.py.
+base_test_max_len: 150
+
+
+# ==============================================================================
+# DOMAIN FINE-TUNING — CONVERSATIONAL CORPUS
+# ==============================================================================
+# Fine-tuning starts from the selected biblical checkpoint and updates all
+# model parameters on train_dialogue_tokenized.tsv. Validation uses only
+# val_dialogue_tokenized.tsv. Test sets are not accessed by fine_tune.py.
+#
+# The optimization budget and LR schedule are explicit because later
+# do a size-matched biblical continued-training control with the same batch
+# size, number of optimizer steps, and LR trajectory.
+
+# ------------------------------------------------------------------------------
+# Training duration
+# ------------------------------------------------------------------------------
+ft_epochs: 30
+
+# ------------------------------------------------------------------------------
+# Mini-batching
+# ------------------------------------------------------------------------------
+ft_batch_size_cuda: 16
+ft_batch_size_cpu: 16
+ft_shuffle_train: true
+ft_drop_last: false
+
+# ------------------------------------------------------------------------------
+# Optimizer
+# ------------------------------------------------------------------------------
+# Fine-tuning always starts a new optimizer state from the selected base model.
+ft_optimizer: "adamw"
+ft_learning_rate: 0.0001
+ft_adam_beta1: 0.9
+ft_adam_beta2: 0.98
+ft_adam_eps: 1.0e-9
+ft_weight_decay: 0.0001
+
+# ------------------------------------------------------------------------------
+# Loss / gradients
+# ------------------------------------------------------------------------------
+ft_label_smoothing: 0.1
+ft_grad_clip_norm: 1.0
+
+# ------------------------------------------------------------------------------
+# Learning-rate scheduler
+# ------------------------------------------------------------------------------
+# CosineAnnealingLR is stepped after every optimizer update.
+# T_max is computed at runtime as len(train_loader) * ft_epochs.
+ft_scheduler: "cosine"
+ft_scheduler_eta_min: 1.0e-6
+ft_scheduler_step_unit: "optimizer_step"
+
+# ------------------------------------------------------------------------------
+# Mixed precision / DataLoader
+# ------------------------------------------------------------------------------
+ft_amp_enabled: true
+ft_num_workers: 0
+ft_pin_memory: true
+
+
+# ==============================================================================
+# VALIDATION DURING FINE-TUNING
+# ==============================================================================
+# Teacher-forced validation loss is computed every epoch.
+# Greedy BLEU/chrF++ is computed periodically and on the final epoch.
+# The best adapted checkpoint is selected only by conversational validation
+# chrF++; test sets remain excluded from model selection.
+ft_val_metric_interval_epochs: 2
+ft_val_max_len: 150
+ft_checkpoint_metric: "chrf++"
+
+
+# ==============================================================================
+# FINE-TUNED MODEL — FINAL TEST EVALUATION
+# ==============================================================================
+# Used by evaluate_finetuned.py / 14_run_finetuned_evaluation.py.
+ft_test_max_len: 150
+
+
+# ==============================================================================
+# E2 — CONTINUED-TRAINING CONTROL
+# ==============================================================================
+# The control starts from the same selected biblical checkpoint used by
+# conversational fine-tuning, but continues optimization on a deterministic
+# size-matched subset of biblical training pairs. The selected fine-tuned
+# checkpoint defines both (1) the exact optimizer-step budget to match and
+# (2) the full cosine-scheduler horizon. This isolates domain data from the
+# effect of simply performing additional optimization.
+
+# ------------------------------------------------------------------------------
+# Size-matched biblical subset
+# ------------------------------------------------------------------------------
+# Must equal the number of conversational training pairs (1,128 under the
+# dialogue-level split). The same fixed subset is reused across directions,
+# architectures, and model seeds; model-seed variation still controls data
+# shuffling and stochastic training operations.
+ct_subset_size: 1128
+ct_subset_seed: 1989
+
+# Optimizer-step budget is read from the corresponding selected fine-tuned
+# checkpoint. The control therefore stops at exactly the same optimizer step.
+ct_budget_source: "finetuned_checkpoint"
+
+# ------------------------------------------------------------------------------
+# Mini-batching — intentionally matched to conversational fine-tuning
+# ------------------------------------------------------------------------------
+ct_batch_size_cuda: 16
+ct_batch_size_cpu: 16
+ct_shuffle_train: true
+ct_drop_last: false
+
+# ------------------------------------------------------------------------------
+# Optimizer — intentionally matched to conversational fine-tuning
+# ------------------------------------------------------------------------------
+ct_optimizer: "adamw"
+ct_learning_rate: 0.0001
+ct_adam_beta1: 0.9
+ct_adam_beta2: 0.98
+ct_adam_eps: 1.0e-9
+ct_weight_decay: 0.0001
+
+# ------------------------------------------------------------------------------
+# Loss / gradients — intentionally matched to conversational fine-tuning
+# ------------------------------------------------------------------------------
+ct_label_smoothing: 0.1
+ct_grad_clip_norm: 1.0
+
+# ------------------------------------------------------------------------------
+# Learning-rate scheduler — intentionally matched to fine-tuning
+# ------------------------------------------------------------------------------
+# The control uses the same cosine schedule horizon stored in the selected
+# fine-tuned checkpoint and follows that trajectory only up to the matched
+# optimizer step.
+ct_scheduler: "cosine"
+ct_scheduler_eta_min: 1.0e-6
+ct_scheduler_step_unit: "optimizer_step"
+
+# ------------------------------------------------------------------------------
+# Mixed precision / DataLoader
+# ------------------------------------------------------------------------------
+ct_amp_enabled: true
+ct_num_workers: 0
+ct_pin_memory: true
+
+# ==============================================================================
+# CONTINUED-CONTROL MODEL — FINAL TEST EVALUATION
+# ==============================================================================
+ct_test_max_len: 150
+
+
+# ==============================================================================
+# DECODING POLICY
+# ==============================================================================
+# All validation and final test evaluations use greedy decoding.
+
+# ==============================================================================
+# E8 — PAIRED BOOTSTRAP CONFIDENCE INTERVALS
+# ==============================================================================
+# E8 quantifies test-set uncertainty for prespecified primary contrasts.
+# Model-seed variability remains a separate quantity and should continue to be
+# reported as mean ± sample SD across seeds 111, 222, and 333.
+#
+# The bootstrap is paired: exactly the same resampled test units are applied to
+# both systems in a contrast and to all three model seeds. The bootstrap
+# statistic is the mean corpus-metric difference across model seeds.
+#
+# To preserve the dependence structure already enforced during splitting,
+# resampling is performed over USFM verse groups for the biblical test set and
+# complete dialogue groups for the conversational test set rather than treating
+# aligned edition variants / turns as independent observations.
+
+# Final analysis uses the upper end of the reviewer-requested 1,000–5,000 range.
+bootstrap_replicates: 5000
+bootstrap_confidence_level: 0.95
+bootstrap_seed: 1989
+
+# E8 is pinned to the exact SacreBLEU version used for the reported metrics.
+bootstrap_expected_sacrebleu_version: "2.6.0"
+bootstrap_metric_validation_tolerance: 1.0e-9
+
+# Output location is resolved under results_dir.
+bootstrap_output_subdir: "bootstrap"
+bootstrap_output_prefix: "bootstrap_summary"
+
+# Resampling units are domain-specific.
+#
+# Biblical test: cluster bootstrap by USFM verse. Multiple aligned edition
+# variants can correspond to the same underlying verse, so usfm_code keeps
+# those dependent variants together during resampling.
+#
+# Conversational test: paired example-level bootstrap over the 241 test pairs.
+# The dialogue-level split is still retained to prevent train/validation/test
+# leakage, but the test partition contains only six dialogue clusters, which is
+# too few for a stable percentile cluster-bootstrap interval. Using
+# example_index preserves exact pairing between systems while providing 241
+# resampling units.
+bootstrap_resampling_units:
+  biblical: "usfm_code"
+  conversational: "example_index"
+
+# Domain-adaptation/retention contrasts are evaluated on both test domains.
+bootstrap_adaptation_domains:
+  - "biblical"
+  - "conversational"
+
+# Primary contrast families.
+bootstrap_enable_adaptation_contrasts: true
+bootstrap_enable_architecture_contrasts: true
+
+# Prespecified architecture reference and alternatives. This avoids an
+# exhaustive all-pairs post-hoc architecture search.
+bootstrap_architecture_reference:
+  encoder_layers: 4
+  decoder_layers: 4
+
+bootstrap_architecture_comparators:
+  - encoder_layers: 6
+    decoder_layers: 2
+  - encoder_layers: 2
+    decoder_layers: 6
+
+# Principal architecture conditions only:
+#   1) base model on its biblical training domain;
+#   2) adapted model on the conversational target domain.
+bootstrap_architecture_conditions:
+  - stage: "base"
+    domain: "biblical"
+  - stage: "finetuned"
+    domain: "conversational"

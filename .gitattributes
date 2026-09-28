@@ -1,0 +1,36 @@
+# ==============================================================================
+# Text-file normalization
+# ==============================================================================
+#
+# Store reproducible Unix-style LF line endings in the Git repository,
+# independently of the operating system used to clone it.
+
+* text=auto
+
+*.py        text eol=lf
+*.yaml      text eol=lf
+*.yml       text eol=lf
+*.md        text eol=lf
+*.txt       text eol=lf
+*.json      text eol=lf
+*.csv       text eol=lf
+*.tsv       text eol=lf
+*.vocab     text eol=lf
+
+.gitignore      text eol=lf
+.gitattributes  text eol=lf
+LICENSE         text eol=lf
+
+
+# ==============================================================================
+# Binary files
+# ==============================================================================
+
+*.model binary
+*.pt    binary
+*.pth   binary
+*.ckpt  binary
+*.pdf   binary
+*.zip   binary
+*.7z    binary
+*.gz    binary
