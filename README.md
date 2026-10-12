@@ -70,6 +70,7 @@ nmt-aym-spa/
 ├── 15_run_continued_training_control.py
 ├── 16_run_continued_control_evaluation.py
 ├── 17_bootstrap_analysis.py
+├── 18_benchmark_inference.py
 ├── config.yaml
 ├── requirements.txt
 ├── LICENSE
@@ -77,6 +78,7 @@ nmt-aym-spa/
 │   └── README.md
 ├── src/
 │   ├── analysis/
+│   ├── benchmarking/
 │   ├── data/
 │   ├── evaluation/
 │   ├── models/
@@ -140,7 +142,8 @@ The current definitive configuration specifies:
 - base training epochs: `150`;
 - conversational fine-tuning epochs: `30`;
 - greedy decoding with maximum generation length `150`;
-- paired bootstrap confidence intervals with `5000` replicates and 95% confidence level.
+- paired bootstrap confidence intervals with `5000` replicates and 95% confidence level;
+- post-hoc inference benchmarking with batch size `1`, FP32, greedy decoding, and `max_len=150`.
 
 Do not modify the definitive configuration while final experimental runs are in progress if exact Git/configuration provenance is required.
 
@@ -271,6 +274,60 @@ Model-seed variability and test-set resampling uncertainty are treated separatel
 
 - model-seed variability is summarized across seeds using mean ± sample standard deviation;
 - paired bootstrap intervals quantify uncertainty associated with test-set resampling.
+
+### 8. Post-hoc inference benchmark
+
+```bash
+python -m unittest tests.test_inference_benchmark -v
+python 18_benchmark_inference.py --dry-run
+python 18_benchmark_inference.py
+```
+
+The benchmark does **not** retrain any model. It loads the already selected
+checkpoints and measures only the two prespecified architecture-analysis
+conditions:
+
+- **Base → Biblical test**;
+- **Fine-tuned → Conversational test**.
+
+For each condition, both translation directions, all three depth allocations,
+and seeds `111`, `222`, and `333` are benchmarked, for 36 checkpoint/test
+measurements in total.
+
+The definitive protocol uses batch size `1`, FP32, greedy decoding,
+`max_len=150`, 10 warm-up examples, and one complete measured test-set pass per
+checkpoint. Source tensors are materialized from the tokenized TSV files before
+timing. Architecture order is deterministically rotated across seeds so each
+architecture occupies the first, middle, and last timing position once within
+each stage/direction. Immediately before the measured pass, CUDA is synchronized
+and peak allocated-memory statistics are reset. CUDA is synchronized again
+before the wall-clock timer is stopped.
+
+The timed region includes CPU-to-GPU transfer of each already-tokenized source
+tensor, encoder computation, and autoregressive greedy decoding. It excludes
+checkpoint loading, TSV parsing, SentencePiece detokenization, BLEU/chrF++
+calculation, and output-file writing.
+
+Only three primary inference quantities are reported:
+
+- latency in milliseconds per sentence;
+- generated-token throughput in tokens per second;
+- peak allocated CUDA memory in MiB.
+
+Results are summarized as mean ± sample standard deviation across the three
+model seeds. The benchmark writes only lightweight numerical metadata (no
+reference or hypothesis text):
+
+```text
+results/inference_benchmark/inference_benchmark_runs.csv
+results/inference_benchmark/inference_benchmark_summary.csv
+results/inference_benchmark/inference_benchmark_summary.json
+```
+
+For a scientifically comparable run, execute all 36 measurements in the same
+process on the same GPU while avoiding other GPU-heavy workloads. Commit/tag the
+benchmark code before the definitive run so the output JSON records a clean and
+exact Git state.
 
 ## Evaluation
 

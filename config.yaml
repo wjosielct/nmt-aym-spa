@@ -428,3 +428,54 @@ bootstrap_architecture_conditions:
     domain: "biblical"
   - stage: "finetuned"
     domain: "conversational"
+
+# ==============================================================================
+# POST-HOC INFERENCE BENCHMARK
+# ==============================================================================
+# This benchmark complements the fixed-eight-layer depth-allocation study with
+# a small, standardized inference-cost characterization. It does not modify or
+# rerun training. Only the two conditions used for the primary architecture
+# analysis are benchmarked: Base/Biblical and Fine-tuned/Conversational.
+#
+# Primary reported metrics:
+#   1) latency in ms/sentence;
+#   2) generated tokens/s;
+#   3) peak allocated CUDA memory in MiB.
+#
+# Timing begins from already-tokenized CPU source tensors and includes the
+# source transfer to CUDA, encoder computation, and autoregressive greedy
+# decoding. It excludes checkpoint loading, TSV parsing, SentencePiece text
+# decoding, BLEU/chrF++ computation, and result-file I/O.
+
+inference_benchmark:
+  conditions:
+    - stage: "base"
+      domain: "biblical"
+    - stage: "finetuned"
+      domain: "conversational"
+
+  # Latency-oriented inference setting. The implementation intentionally
+  # supports only batch size 1 for the definitive benchmark.
+  batch_size: 1
+
+  # Warm up CUDA/kernels with the first examples before resetting peak-memory
+  # statistics and starting the wall-clock timer. Warm-up examples are then
+  # included again in the full measured test pass.
+  warmup_examples: 10
+
+  # One complete measured pass per checkpoint. The three independently trained
+  # model seeds provide the values summarized as mean ± sample SD.
+  repetitions: 1
+
+  # Kept identical to the reported greedy final evaluations.
+  max_len: 150
+  precision: "fp32"
+
+  # Peak GPU memory is a primary benchmark metric, so the definitive benchmark
+  # requires CUDA and must be executed on the same physical GPU for every run.
+  require_cuda: true
+  cuda_device_index: 0
+
+  # Lightweight numerical outputs only; no corpus text is written.
+  output_subdir: "inference_benchmark"
+  output_prefix: "inference_benchmark"
