@@ -1,0 +1,524 @@
+{
+    "model_tag": "spa_to_aym_Enc2_Dec6_Seed222",
+    "experiment_type": "Base-Test-Evaluation",
+    "training_domain": "Biblical",
+    "src": "spa",
+    "tgt": "aym",
+    "experiment_seed": 222,
+    "checkpoint_selection_metric": "chrF++",
+    "best_checkpoint_epoch": 130,
+    "checkpoint": {
+        "path": "C:\\Users\\ASUS\\Desktop\\nmt-aym-spa\\models\\base_checkpoint_spa_to_aym_Enc2_Dec6_Seed222.pt",
+        "sha256": "17bb4bc0657eeb45164a54122e7417c0df8e7627816be42240238eb7cc621f55",
+        "best_val_chrf": 35.81353079412253,
+        "val_bleu_at_best_chrf": 7.0440944971499535,
+        "validation_metric_signatures": {
+            "bleu": "nrefs:1|case:mixed|eff:no|tok:13a|smooth:exp|version:2.6.0",
+            "chrf++": "nrefs:1|case:mixed|eff:yes|nc:6|nw:2|space:no|version:2.6.0"
+        },
+        "training_input_hashes": {
+            "config_sha256": "8cd474a51d445b8984362fe23a886c2b7356d151adaae49de028fc51baa0db22",
+            "sentencepiece_model_sha256": "5508521388f095f47a905b24586e647b703a780805d80c0bc043256a3ca1cf21",
+            "train_bible_tokenized_sha256": "3be6fef96d5d8121a4fd1d2459b3ceb3dfed55358456e08a8e4ebe53febcea94",
+            "val_bible_tokenized_sha256": "cdc8f634185eb3ec7425c6bd858dc7952990b329491da3d27db1235f1058c716"
+        },
+        "training_git": {
+            "commit": "3c367bd9a46175907279c1641375fb35666d45d9",
+            "branch": "main",
+            "exact_tag": "ijai-experiments-v2",
+            "dirty_worktree": false
+        }
+    },
+    "model": {
+        "vocab_size": 8000,
+        "pad_id": 0,
+        "architecture": {
+            "d_model": 256,
+            "n_heads": 8,
+            "encoder_layers": 2,
+            "decoder_layers": 6,
+            "dim_feedforward": 1024,
+            "dropout": 0.2,
+            "positional_encoding_max_len": 1000
+        }
+    },
+    "evaluation": {
+        "decoding_strategy": "greedy",
+        "max_len": 150,
+        "prediction_export": {
+            "format": "tsv",
+            "columns": [
+                "example_index",
+                "reference",
+                "hypothesis"
+            ]
+        }
+    },
+    "biblical_results": {
+        "domain": "Biblical",
+        "relation_to_training_domain": "in-domain",
+        "test_file": "data\\tokenized\\test_bible_tokenized.tsv",
+        "predictions_file": "results\\base_predictions_biblical_spa_to_aym_Enc2_Dec6_Seed222.tsv",
+        "test_pairs": 6033,
+        "bleu_score": 6.56785221966301,
+        "chrf_score": 35.455819841946266,
+        "bleu_signature": "nrefs:1|case:mixed|eff:no|tok:13a|smooth:exp|version:2.6.0",
+        "chrf_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:2|space:no|version:2.6.0",
+        "evaluation_time_seconds": 1453.5533310000028,
+        "evaluation_time_hours": 0.40376481416666743
+    },
+    "conversational_results": {
+        "domain": "Conversational",
+        "relation_to_training_domain": "out-of-domain",
+        "test_file": "data\\tokenized\\test_dialogue_tokenized.tsv",
+        "predictions_file": "results\\base_predictions_conversational_spa_to_aym_Enc2_Dec6_Seed222.tsv",
+        "test_pairs": 241,
+        "bleu_score": 0.5909945130836782,
+        "chrf_score": 23.411614345250833,
+        "bleu_signature": "nrefs:1|case:mixed|eff:no|tok:13a|smooth:exp|version:2.6.0",
+        "chrf_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:2|space:no|version:2.6.0",
+        "evaluation_time_seconds": 29.014713799988385,
+        "evaluation_time_hours": 0.008059642722218995
+    },
+    "evaluation_hashes": {
+        "checkpoint_sha256": "17bb4bc0657eeb45164a54122e7417c0df8e7627816be42240238eb7cc621f55",
+        "sentencepiece_model_sha256": "5508521388f095f47a905b24586e647b703a780805d80c0bc043256a3ca1cf21",
+        "test_bible_tokenized_sha256": "92806cbebaea0d01d5a9f2527a1b020bde2fd4f4c0ad4c5a3e90a85aae9d9afa",
+        "test_dialogue_tokenized_sha256": "f3aa86048bc1e03009b92d74b70ef029bed3e32ea96ed97fe132d5f0f49d995b",
+        "biblical_predictions_sha256": "95030c2ee42df4fbfa34331bc640a9423290bc919ea8d3d7f0e17874796d2d84",
+        "conversational_predictions_sha256": "7aa2887f335b2fb7cfced0d83316d8aa9459f142f4da73e31dbe181d026dc304"
+    },
+    "timing": {
+        "biblical_test_seconds": 1453.5533310000028,
+        "conversational_test_seconds": 29.014713799988385,
+        "total_execution_time_seconds": 1483.144452299981,
+        "total_execution_time_hours": 0.411984570083328
+    },
+    "hardware": {
+        "device_type": "cuda",
+        "device_name": "NVIDIA GeForce RTX 2050",
+        "gpu_total_memory_mb": 4095.5,
+        "peak_gpu_memory_allocated_mb": 73.1044921875,
+        "peak_gpu_memory_reserved_mb": 88.0
+    },
+    "reproducibility": {
+        "deterministic_algorithms_enabled": true,
+        "cudnn_deterministic": true,
+        "cudnn_benchmark": false
+    },
+    "software": {
+        "python_version": "3.10.21",
+        "pytorch_version": "2.5.1+cu121",
+        "cuda_version": "12.1",
+        "cudnn_version": 90100,
+        "sentencepiece_version": "0.2.2",
+        "sacrebleu_version": "2.6.0",
+        "pandas_version": "2.3.3",
+        "platform": "Windows-10-10.0.26200-SP0",
+        "hostname": "LAPTOP-JAZIER"
+    },
+    "git": {
+        "commit": "3c367bd9a46175907279c1641375fb35666d45d9",
+        "branch": "main",
+        "exact_tag": "ijai-experiments-v2",
+        "dirty_worktree": false
+    },
+    "training_config": {
+        "data_split_seed": 1989,
+        "experiment_seed": 222,
+        "src": "spa",
+        "tgt": "aym",
+        "experiment_seeds": [
+            111,
+            222,
+            333
+        ],
+        "experiment_directions": [
+            {
+                "src": "aym",
+                "tgt": "spa"
+            },
+            {
+                "src": "spa",
+                "tgt": "aym"
+            }
+        ],
+        "experiment_architectures": [
+            {
+                "encoder_layers": 4,
+                "decoder_layers": 4
+            },
+            {
+                "encoder_layers": 6,
+                "decoder_layers": 2
+            },
+            {
+                "encoder_layers": 2,
+                "decoder_layers": 6
+            }
+        ],
+        "deterministic_training": true,
+        "raw_bible_data_dir": "data/raw/bible",
+        "raw_pdf_dir": "data/raw/book",
+        "interim_data_dir": "data/interim",
+        "clean_data_dir": "data/clean",
+        "splits_dir": "data/splits",
+        "tokenizer_dir": "tokenizer",
+        "tokenized_dir": "data/tokenized",
+        "models_dir": "models",
+        "results_dir": "results",
+        "bibles": [
+            {
+                "code": 293,
+                "lang": "aym"
+            },
+            {
+                "code": 2250,
+                "lang": "aym"
+            },
+            {
+                "code": 4278,
+                "lang": "spa"
+            },
+            {
+                "code": 146,
+                "lang": "spa"
+            }
+        ],
+        "min_words_bible": 2,
+        "min_words_book": 1,
+        "max_words": 70,
+        "max_ratio": 3.5,
+        "bible_train_ratio": 0.9,
+        "bible_val_ratio": 0.05,
+        "bible_test_ratio": 0.05,
+        "book_train_ratio": 0.7,
+        "book_val_ratio": 0.15,
+        "book_test_ratio": 0.15,
+        "vocab_size": 8000,
+        "model_type": "bpe",
+        "character_coverage": 1.0,
+        "d_model": 256,
+        "n_heads": 8,
+        "encoder_layers": 2,
+        "decoder_layers": 6,
+        "dim_feedforward": 1024,
+        "positional_encoding_max_len": 1000,
+        "base_epochs": 150,
+        "base_batch_size_cuda": 64,
+        "base_batch_size_cpu": 32,
+        "base_shuffle_train": true,
+        "base_drop_last": false,
+        "base_dropout": 0.2,
+        "base_weight_init": "xavier_uniform",
+        "base_optimizer": "adamw",
+        "base_max_learning_rate": 0.0005,
+        "base_adam_beta1": 0.9,
+        "base_adam_beta2": 0.98,
+        "base_adam_eps": 1e-09,
+        "base_weight_decay": 0.0001,
+        "base_label_smoothing": 0.1,
+        "base_grad_clip_norm": 1.0,
+        "base_scheduler": "onecycle",
+        "base_scheduler_pct_start": 0.1,
+        "base_scheduler_anneal_strategy": "cos",
+        "base_scheduler_div_factor": 25.0,
+        "base_scheduler_final_div_factor": 10000.0,
+        "base_scheduler_three_phase": false,
+        "base_scheduler_cycle_momentum": true,
+        "base_scheduler_base_momentum": 0.85,
+        "base_scheduler_max_momentum": 0.95,
+        "base_amp_enabled": true,
+        "base_num_workers": 0,
+        "base_pin_memory": true,
+        "base_val_metric_interval_epochs": 10,
+        "base_val_max_len": 150,
+        "base_checkpoint_metric": "chrf++",
+        "base_test_max_len": 150,
+        "ft_epochs": 30,
+        "ft_batch_size_cuda": 16,
+        "ft_batch_size_cpu": 16,
+        "ft_shuffle_train": true,
+        "ft_drop_last": false,
+        "ft_optimizer": "adamw",
+        "ft_learning_rate": 0.0001,
+        "ft_adam_beta1": 0.9,
+        "ft_adam_beta2": 0.98,
+        "ft_adam_eps": 1e-09,
+        "ft_weight_decay": 0.0001,
+        "ft_label_smoothing": 0.1,
+        "ft_grad_clip_norm": 1.0,
+        "ft_scheduler": "cosine",
+        "ft_scheduler_eta_min": 1e-06,
+        "ft_scheduler_step_unit": "optimizer_step",
+        "ft_amp_enabled": true,
+        "ft_num_workers": 0,
+        "ft_pin_memory": true,
+        "ft_val_metric_interval_epochs": 2,
+        "ft_val_max_len": 150,
+        "ft_checkpoint_metric": "chrf++",
+        "ft_test_max_len": 150,
+        "ct_subset_size": 1128,
+        "ct_subset_seed": 1989,
+        "ct_budget_source": "finetuned_checkpoint",
+        "ct_batch_size_cuda": 16,
+        "ct_batch_size_cpu": 16,
+        "ct_shuffle_train": true,
+        "ct_drop_last": false,
+        "ct_optimizer": "adamw",
+        "ct_learning_rate": 0.0001,
+        "ct_adam_beta1": 0.9,
+        "ct_adam_beta2": 0.98,
+        "ct_adam_eps": 1e-09,
+        "ct_weight_decay": 0.0001,
+        "ct_label_smoothing": 0.1,
+        "ct_grad_clip_norm": 1.0,
+        "ct_scheduler": "cosine",
+        "ct_scheduler_eta_min": 1e-06,
+        "ct_scheduler_step_unit": "optimizer_step",
+        "ct_amp_enabled": true,
+        "ct_num_workers": 0,
+        "ct_pin_memory": true,
+        "ct_test_max_len": 150,
+        "bootstrap_replicates": 5000,
+        "bootstrap_confidence_level": 0.95,
+        "bootstrap_seed": 1989,
+        "bootstrap_expected_sacrebleu_version": "2.6.0",
+        "bootstrap_metric_validation_tolerance": 1e-09,
+        "bootstrap_output_subdir": "bootstrap",
+        "bootstrap_output_prefix": "bootstrap_summary",
+        "bootstrap_resampling_units": {
+            "biblical": "usfm_code",
+            "conversational": "example_index"
+        },
+        "bootstrap_adaptation_domains": [
+            "biblical",
+            "conversational"
+        ],
+        "bootstrap_enable_adaptation_contrasts": true,
+        "bootstrap_enable_architecture_contrasts": true,
+        "bootstrap_architecture_reference": {
+            "encoder_layers": 4,
+            "decoder_layers": 4
+        },
+        "bootstrap_architecture_comparators": [
+            {
+                "encoder_layers": 6,
+                "decoder_layers": 2
+            },
+            {
+                "encoder_layers": 2,
+                "decoder_layers": 6
+            }
+        ],
+        "bootstrap_architecture_conditions": [
+            {
+                "stage": "base",
+                "domain": "biblical"
+            },
+            {
+                "stage": "finetuned",
+                "domain": "conversational"
+            }
+        ]
+    },
+    "evaluation_config": {
+        "data_split_seed": 1989,
+        "experiment_seed": 222,
+        "src": "spa",
+        "tgt": "aym",
+        "experiment_seeds": [
+            111,
+            222,
+            333
+        ],
+        "experiment_directions": [
+            {
+                "src": "aym",
+                "tgt": "spa"
+            },
+            {
+                "src": "spa",
+                "tgt": "aym"
+            }
+        ],
+        "experiment_architectures": [
+            {
+                "encoder_layers": 4,
+                "decoder_layers": 4
+            },
+            {
+                "encoder_layers": 6,
+                "decoder_layers": 2
+            },
+            {
+                "encoder_layers": 2,
+                "decoder_layers": 6
+            }
+        ],
+        "deterministic_training": true,
+        "raw_bible_data_dir": "data/raw/bible",
+        "raw_pdf_dir": "data/raw/book",
+        "interim_data_dir": "data/interim",
+        "clean_data_dir": "data/clean",
+        "splits_dir": "data/splits",
+        "tokenizer_dir": "tokenizer",
+        "tokenized_dir": "data/tokenized",
+        "models_dir": "models",
+        "results_dir": "results",
+        "bibles": [
+            {
+                "code": 293,
+                "lang": "aym"
+            },
+            {
+                "code": 2250,
+                "lang": "aym"
+            },
+            {
+                "code": 4278,
+                "lang": "spa"
+            },
+            {
+                "code": 146,
+                "lang": "spa"
+            }
+        ],
+        "min_words_bible": 2,
+        "min_words_book": 1,
+        "max_words": 70,
+        "max_ratio": 3.5,
+        "bible_train_ratio": 0.9,
+        "bible_val_ratio": 0.05,
+        "bible_test_ratio": 0.05,
+        "book_train_ratio": 0.7,
+        "book_val_ratio": 0.15,
+        "book_test_ratio": 0.15,
+        "vocab_size": 8000,
+        "model_type": "bpe",
+        "character_coverage": 1.0,
+        "d_model": 256,
+        "n_heads": 8,
+        "encoder_layers": 2,
+        "decoder_layers": 6,
+        "dim_feedforward": 1024,
+        "positional_encoding_max_len": 1000,
+        "base_epochs": 150,
+        "base_batch_size_cuda": 64,
+        "base_batch_size_cpu": 32,
+        "base_shuffle_train": true,
+        "base_drop_last": false,
+        "base_dropout": 0.2,
+        "base_weight_init": "xavier_uniform",
+        "base_optimizer": "adamw",
+        "base_max_learning_rate": 0.0005,
+        "base_adam_beta1": 0.9,
+        "base_adam_beta2": 0.98,
+        "base_adam_eps": 1e-09,
+        "base_weight_decay": 0.0001,
+        "base_label_smoothing": 0.1,
+        "base_grad_clip_norm": 1.0,
+        "base_scheduler": "onecycle",
+        "base_scheduler_pct_start": 0.1,
+        "base_scheduler_anneal_strategy": "cos",
+        "base_scheduler_div_factor": 25.0,
+        "base_scheduler_final_div_factor": 10000.0,
+        "base_scheduler_three_phase": false,
+        "base_scheduler_cycle_momentum": true,
+        "base_scheduler_base_momentum": 0.85,
+        "base_scheduler_max_momentum": 0.95,
+        "base_amp_enabled": true,
+        "base_num_workers": 0,
+        "base_pin_memory": true,
+        "base_val_metric_interval_epochs": 10,
+        "base_val_max_len": 150,
+        "base_checkpoint_metric": "chrf++",
+        "base_test_max_len": 150,
+        "ft_epochs": 30,
+        "ft_batch_size_cuda": 16,
+        "ft_batch_size_cpu": 16,
+        "ft_shuffle_train": true,
+        "ft_drop_last": false,
+        "ft_optimizer": "adamw",
+        "ft_learning_rate": 0.0001,
+        "ft_adam_beta1": 0.9,
+        "ft_adam_beta2": 0.98,
+        "ft_adam_eps": 1e-09,
+        "ft_weight_decay": 0.0001,
+        "ft_label_smoothing": 0.1,
+        "ft_grad_clip_norm": 1.0,
+        "ft_scheduler": "cosine",
+        "ft_scheduler_eta_min": 1e-06,
+        "ft_scheduler_step_unit": "optimizer_step",
+        "ft_amp_enabled": true,
+        "ft_num_workers": 0,
+        "ft_pin_memory": true,
+        "ft_val_metric_interval_epochs": 2,
+        "ft_val_max_len": 150,
+        "ft_checkpoint_metric": "chrf++",
+        "ft_test_max_len": 150,
+        "ct_subset_size": 1128,
+        "ct_subset_seed": 1989,
+        "ct_budget_source": "finetuned_checkpoint",
+        "ct_batch_size_cuda": 16,
+        "ct_batch_size_cpu": 16,
+        "ct_shuffle_train": true,
+        "ct_drop_last": false,
+        "ct_optimizer": "adamw",
+        "ct_learning_rate": 0.0001,
+        "ct_adam_beta1": 0.9,
+        "ct_adam_beta2": 0.98,
+        "ct_adam_eps": 1e-09,
+        "ct_weight_decay": 0.0001,
+        "ct_label_smoothing": 0.1,
+        "ct_grad_clip_norm": 1.0,
+        "ct_scheduler": "cosine",
+        "ct_scheduler_eta_min": 1e-06,
+        "ct_scheduler_step_unit": "optimizer_step",
+        "ct_amp_enabled": true,
+        "ct_num_workers": 0,
+        "ct_pin_memory": true,
+        "ct_test_max_len": 150,
+        "bootstrap_replicates": 5000,
+        "bootstrap_confidence_level": 0.95,
+        "bootstrap_seed": 1989,
+        "bootstrap_expected_sacrebleu_version": "2.6.0",
+        "bootstrap_metric_validation_tolerance": 1e-09,
+        "bootstrap_output_subdir": "bootstrap",
+        "bootstrap_output_prefix": "bootstrap_summary",
+        "bootstrap_resampling_units": {
+            "biblical": "usfm_code",
+            "conversational": "example_index"
+        },
+        "bootstrap_adaptation_domains": [
+            "biblical",
+            "conversational"
+        ],
+        "bootstrap_enable_adaptation_contrasts": true,
+        "bootstrap_enable_architecture_contrasts": true,
+        "bootstrap_architecture_reference": {
+            "encoder_layers": 4,
+            "decoder_layers": 4
+        },
+        "bootstrap_architecture_comparators": [
+            {
+                "encoder_layers": 6,
+                "decoder_layers": 2
+            },
+            {
+                "encoder_layers": 2,
+                "decoder_layers": 6
+            }
+        ],
+        "bootstrap_architecture_conditions": [
+            {
+                "stage": "base",
+                "domain": "biblical"
+            },
+            {
+                "stage": "finetuned",
+                "domain": "conversational"
+            }
+        ]
+    }
+}

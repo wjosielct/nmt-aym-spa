@@ -1,0 +1,589 @@
+{
+    "model_tag": "spa_to_aym_Enc2_Dec6_Seed111",
+    "experiment_type": "Continued-Control-Test-Evaluation",
+    "objective": "E2-continued-training-control",
+    "src": "spa",
+    "tgt": "aym",
+    "experiment_seed": 111,
+    "checkpoint": {
+        "path": "C:\\Users\\ASUS\\Desktop\\nmt-aym-spa\\models\\continued_control_checkpoint_spa_to_aym_Enc2_Dec6_Seed111.pt",
+        "sha256": "f6322917dc6b91f406e491fecb7581b804f1b552a7ef2a221d010cbb008c0c36",
+        "checkpoint_policy": "matched_finetuned_optimizer_step",
+        "optimizer_step": 1988,
+        "steps_per_epoch": 71,
+        "scheduler_horizon_steps": 2130,
+        "base_checkpoint": {
+            "path": "C:\\Users\\ASUS\\Desktop\\nmt-aym-spa\\models\\base_checkpoint_spa_to_aym_Enc2_Dec6_Seed111.pt",
+            "sha256": "f2b34511bd39b54f0f589a7960bfe69b74cf6b364af55fb003568b5e2643da4a",
+            "epoch": 150,
+            "best_val_chrf": 35.73296435125777,
+            "val_bleu_at_best_chrf": 7.024594321095737,
+            "input_hashes": {
+                "config_sha256": "2542bb12dbc7d26b157e0b3f21a9f493b716129dd9ed94b6df2eeff125ac45ef",
+                "sentencepiece_model_sha256": "5508521388f095f47a905b24586e647b703a780805d80c0bc043256a3ca1cf21",
+                "train_bible_tokenized_sha256": "3be6fef96d5d8121a4fd1d2459b3ceb3dfed55358456e08a8e4ebe53febcea94",
+                "val_bible_tokenized_sha256": "cdc8f634185eb3ec7425c6bd858dc7952990b329491da3d27db1235f1058c716"
+            },
+            "git": {
+                "commit": "3c367bd9a46175907279c1641375fb35666d45d9",
+                "branch": "main",
+                "exact_tag": "ijai-experiments-v2",
+                "dirty_worktree": false
+            }
+        },
+        "matched_finetuned_checkpoint": {
+            "path": "C:\\Users\\ASUS\\Desktop\\nmt-aym-spa\\models\\finetuned_checkpoint_spa_to_aym_Enc2_Dec6_Seed111.pt",
+            "sha256": "0953e654b54a9ca9054368bdf51b32b54fece2559b397793ac32e7eab9d1eb14",
+            "epoch": 28,
+            "optimizer_step": 1988,
+            "planned_total_optimizer_steps": 2130,
+            "best_val_chrf": 60.6631628371253,
+            "val_bleu_at_best_chrf": 32.54090968015791,
+            "base_checkpoint_sha256": "f2b34511bd39b54f0f589a7960bfe69b74cf6b364af55fb003568b5e2643da4a",
+            "git": {
+                "commit": "3c367bd9a46175907279c1641375fb35666d45d9",
+                "branch": "main",
+                "exact_tag": "ijai-experiments-v2",
+                "dirty_worktree": false
+            }
+        },
+        "control_subset": {
+            "source_file": "data\\tokenized\\train_bible_tokenized.tsv",
+            "population_pairs": 108823,
+            "subset_pairs": 1128,
+            "matched_dialogue_train_pairs": 1128,
+            "subset_seed": 1989,
+            "sampling": "uniform_without_replacement_over_training_pairs",
+            "selected_indices_sha256": "ed141dce60d700b57b953f8ef167a80fdb7d120ff80dd4db4bf84a9a0535dfd6"
+        },
+        "optimization": {
+            "full_model_training": true,
+            "batch_size": 16,
+            "optimizer": "adamw",
+            "learning_rate": 0.0001,
+            "adam_beta1": 0.9,
+            "adam_beta2": 0.98,
+            "adam_eps": 1e-09,
+            "weight_decay": 0.0001,
+            "label_smoothing": 0.1,
+            "grad_clip_norm": 1.0,
+            "scheduler": "cosine",
+            "scheduler_step_unit": "optimizer_step",
+            "scheduler_eta_min": 1e-06,
+            "scheduler_horizon_steps": 2130,
+            "matched_optimizer_steps": 1988,
+            "completed_optimizer_steps": 1988,
+            "control_epochs_completed": 28,
+            "equivalent_full_epochs": 28,
+            "remainder_steps": 0,
+            "initial_learning_rate": 0.0001,
+            "final_learning_rate": 2.0816937636766246e-06
+        },
+        "control_input_hashes": {
+            "config_sha256": "2542bb12dbc7d26b157e0b3f21a9f493b716129dd9ed94b6df2eeff125ac45ef",
+            "base_checkpoint_sha256": "f2b34511bd39b54f0f589a7960bfe69b74cf6b364af55fb003568b5e2643da4a",
+            "finetuned_checkpoint_sha256": "0953e654b54a9ca9054368bdf51b32b54fece2559b397793ac32e7eab9d1eb14",
+            "sentencepiece_model_sha256": "5508521388f095f47a905b24586e647b703a780805d80c0bc043256a3ca1cf21",
+            "train_bible_tokenized_sha256": "3be6fef96d5d8121a4fd1d2459b3ceb3dfed55358456e08a8e4ebe53febcea94",
+            "train_dialogue_tokenized_sha256": "547e9a9c06eb9c842b3880d552bbbad493b3913f45f118d08dbce37cb646a3d3",
+            "selected_bible_subset_indices_sha256": "ed141dce60d700b57b953f8ef167a80fdb7d120ff80dd4db4bf84a9a0535dfd6"
+        },
+        "control_git": {
+            "commit": "3c367bd9a46175907279c1641375fb35666d45d9",
+            "branch": "main",
+            "exact_tag": "ijai-experiments-v2",
+            "dirty_worktree": false
+        }
+    },
+    "model": {
+        "vocab_size": 8000,
+        "pad_id": 0,
+        "architecture": {
+            "d_model": 256,
+            "n_heads": 8,
+            "encoder_layers": 2,
+            "decoder_layers": 6,
+            "dim_feedforward": 1024,
+            "dropout": 0.2,
+            "positional_encoding_max_len": 1000
+        }
+    },
+    "evaluation": {
+        "decoding_strategy": "greedy",
+        "max_len": 150,
+        "prediction_export": {
+            "format": "tsv",
+            "columns": [
+                "example_index",
+                "reference",
+                "hypothesis"
+            ]
+        }
+    },
+    "biblical_results": {
+        "domain": "Biblical",
+        "relation_to_control_training_domain": "continued-training-domain",
+        "test_file": "data\\tokenized\\test_bible_tokenized.tsv",
+        "predictions_file": "results\\continued_control_predictions_biblical_spa_to_aym_Enc2_Dec6_Seed111.tsv",
+        "test_pairs": 6033,
+        "bleu_score": 5.554590146262262,
+        "chrf_score": 33.83578115585363,
+        "bleu_signature": "nrefs:1|case:mixed|eff:no|tok:13a|smooth:exp|version:2.6.0",
+        "chrf_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:2|space:no|version:2.6.0",
+        "evaluation_time_seconds": 1533.3132486999966,
+        "evaluation_time_hours": 0.4259203468611102
+    },
+    "conversational_results": {
+        "domain": "Conversational",
+        "relation_to_control_training_domain": "out-of-domain",
+        "test_file": "data\\tokenized\\test_dialogue_tokenized.tsv",
+        "predictions_file": "results\\continued_control_predictions_conversational_spa_to_aym_Enc2_Dec6_Seed111.tsv",
+        "test_pairs": 241,
+        "bleu_score": 0.3494796162904283,
+        "chrf_score": 23.552030767505652,
+        "bleu_signature": "nrefs:1|case:mixed|eff:no|tok:13a|smooth:exp|version:2.6.0",
+        "chrf_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:2|space:no|version:2.6.0",
+        "evaluation_time_seconds": 31.39641450002091,
+        "evaluation_time_hours": 0.008721226250005808
+    },
+    "evaluation_hashes": {
+        "checkpoint_sha256": "f6322917dc6b91f406e491fecb7581b804f1b552a7ef2a221d010cbb008c0c36",
+        "sentencepiece_model_sha256": "5508521388f095f47a905b24586e647b703a780805d80c0bc043256a3ca1cf21",
+        "test_bible_tokenized_sha256": "92806cbebaea0d01d5a9f2527a1b020bde2fd4f4c0ad4c5a3e90a85aae9d9afa",
+        "test_dialogue_tokenized_sha256": "f3aa86048bc1e03009b92d74b70ef029bed3e32ea96ed97fe132d5f0f49d995b",
+        "biblical_predictions_sha256": "1be41ab6d5f3d2f4406d44baf928f32202ede766a8f88fe858fbf2981e39e4b6",
+        "conversational_predictions_sha256": "5f3f8a27309f3857376657c5014a072a9093031730b9245743964dd5bbf7e6c8"
+    },
+    "timing": {
+        "biblical_test_seconds": 1533.3132486999966,
+        "conversational_test_seconds": 31.39641450002091,
+        "total_execution_time_seconds": 1565.3426858000457,
+        "total_execution_time_hours": 0.4348174127222349
+    },
+    "hardware": {
+        "device_type": "cuda",
+        "device_name": "NVIDIA GeForce RTX 2050",
+        "gpu_total_memory_mb": 4095.5,
+        "peak_gpu_memory_allocated_mb": 73.12548828125,
+        "peak_gpu_memory_reserved_mb": 86.0
+    },
+    "reproducibility": {
+        "deterministic_algorithms_enabled": true,
+        "cudnn_deterministic": true,
+        "cudnn_benchmark": false
+    },
+    "software": {
+        "python_version": "3.10.21",
+        "pytorch_version": "2.5.1+cu121",
+        "cuda_version": "12.1",
+        "cudnn_version": 90100,
+        "sentencepiece_version": "0.2.2",
+        "sacrebleu_version": "2.6.0",
+        "pandas_version": "2.3.3",
+        "platform": "Windows-10-10.0.26200-SP0"
+    },
+    "git": {
+        "commit": "3c367bd9a46175907279c1641375fb35666d45d9",
+        "branch": "main",
+        "exact_tag": "ijai-experiments-v2",
+        "dirty_worktree": false
+    },
+    "control_config": {
+        "data_split_seed": 1989,
+        "experiment_seed": 111,
+        "src": "spa",
+        "tgt": "aym",
+        "experiment_seeds": [
+            111,
+            222,
+            333
+        ],
+        "experiment_directions": [
+            {
+                "src": "aym",
+                "tgt": "spa"
+            },
+            {
+                "src": "spa",
+                "tgt": "aym"
+            }
+        ],
+        "experiment_architectures": [
+            {
+                "encoder_layers": 4,
+                "decoder_layers": 4
+            },
+            {
+                "encoder_layers": 6,
+                "decoder_layers": 2
+            },
+            {
+                "encoder_layers": 2,
+                "decoder_layers": 6
+            }
+        ],
+        "deterministic_training": true,
+        "raw_bible_data_dir": "data/raw/bible",
+        "raw_pdf_dir": "data/raw/book",
+        "interim_data_dir": "data/interim",
+        "clean_data_dir": "data/clean",
+        "splits_dir": "data/splits",
+        "tokenizer_dir": "tokenizer",
+        "tokenized_dir": "data/tokenized",
+        "models_dir": "models",
+        "results_dir": "results",
+        "bibles": [
+            {
+                "code": 293,
+                "lang": "aym"
+            },
+            {
+                "code": 2250,
+                "lang": "aym"
+            },
+            {
+                "code": 4278,
+                "lang": "spa"
+            },
+            {
+                "code": 146,
+                "lang": "spa"
+            }
+        ],
+        "min_words_bible": 2,
+        "min_words_book": 1,
+        "max_words": 70,
+        "max_ratio": 3.5,
+        "bible_train_ratio": 0.9,
+        "bible_val_ratio": 0.05,
+        "bible_test_ratio": 0.05,
+        "book_train_ratio": 0.7,
+        "book_val_ratio": 0.15,
+        "book_test_ratio": 0.15,
+        "vocab_size": 8000,
+        "model_type": "bpe",
+        "character_coverage": 1.0,
+        "d_model": 256,
+        "n_heads": 8,
+        "encoder_layers": 2,
+        "decoder_layers": 6,
+        "dim_feedforward": 1024,
+        "positional_encoding_max_len": 1000,
+        "base_epochs": 150,
+        "base_batch_size_cuda": 64,
+        "base_batch_size_cpu": 32,
+        "base_shuffle_train": true,
+        "base_drop_last": false,
+        "base_dropout": 0.2,
+        "base_weight_init": "xavier_uniform",
+        "base_optimizer": "adamw",
+        "base_max_learning_rate": 0.0005,
+        "base_adam_beta1": 0.9,
+        "base_adam_beta2": 0.98,
+        "base_adam_eps": 1e-09,
+        "base_weight_decay": 0.0001,
+        "base_label_smoothing": 0.1,
+        "base_grad_clip_norm": 1.0,
+        "base_scheduler": "onecycle",
+        "base_scheduler_pct_start": 0.1,
+        "base_scheduler_anneal_strategy": "cos",
+        "base_scheduler_div_factor": 25.0,
+        "base_scheduler_final_div_factor": 10000.0,
+        "base_scheduler_three_phase": false,
+        "base_scheduler_cycle_momentum": true,
+        "base_scheduler_base_momentum": 0.85,
+        "base_scheduler_max_momentum": 0.95,
+        "base_amp_enabled": true,
+        "base_num_workers": 0,
+        "base_pin_memory": true,
+        "base_val_metric_interval_epochs": 10,
+        "base_val_max_len": 150,
+        "base_checkpoint_metric": "chrf++",
+        "base_test_max_len": 150,
+        "ft_epochs": 30,
+        "ft_batch_size_cuda": 16,
+        "ft_batch_size_cpu": 16,
+        "ft_shuffle_train": true,
+        "ft_drop_last": false,
+        "ft_optimizer": "adamw",
+        "ft_learning_rate": 0.0001,
+        "ft_adam_beta1": 0.9,
+        "ft_adam_beta2": 0.98,
+        "ft_adam_eps": 1e-09,
+        "ft_weight_decay": 0.0001,
+        "ft_label_smoothing": 0.1,
+        "ft_grad_clip_norm": 1.0,
+        "ft_scheduler": "cosine",
+        "ft_scheduler_eta_min": 1e-06,
+        "ft_scheduler_step_unit": "optimizer_step",
+        "ft_amp_enabled": true,
+        "ft_num_workers": 0,
+        "ft_pin_memory": true,
+        "ft_val_metric_interval_epochs": 2,
+        "ft_val_max_len": 150,
+        "ft_checkpoint_metric": "chrf++",
+        "ft_test_max_len": 150,
+        "ct_subset_size": 1128,
+        "ct_subset_seed": 1989,
+        "ct_budget_source": "finetuned_checkpoint",
+        "ct_batch_size_cuda": 16,
+        "ct_batch_size_cpu": 16,
+        "ct_shuffle_train": true,
+        "ct_drop_last": false,
+        "ct_optimizer": "adamw",
+        "ct_learning_rate": 0.0001,
+        "ct_adam_beta1": 0.9,
+        "ct_adam_beta2": 0.98,
+        "ct_adam_eps": 1e-09,
+        "ct_weight_decay": 0.0001,
+        "ct_label_smoothing": 0.1,
+        "ct_grad_clip_norm": 1.0,
+        "ct_scheduler": "cosine",
+        "ct_scheduler_eta_min": 1e-06,
+        "ct_scheduler_step_unit": "optimizer_step",
+        "ct_amp_enabled": true,
+        "ct_num_workers": 0,
+        "ct_pin_memory": true,
+        "ct_test_max_len": 150,
+        "bootstrap_replicates": 5000,
+        "bootstrap_confidence_level": 0.95,
+        "bootstrap_seed": 1989,
+        "bootstrap_expected_sacrebleu_version": "2.6.0",
+        "bootstrap_metric_validation_tolerance": 1e-09,
+        "bootstrap_output_subdir": "bootstrap",
+        "bootstrap_output_prefix": "bootstrap_summary",
+        "bootstrap_resampling_units": {
+            "biblical": "usfm_code",
+            "conversational": "example_index"
+        },
+        "bootstrap_adaptation_domains": [
+            "biblical",
+            "conversational"
+        ],
+        "bootstrap_enable_adaptation_contrasts": true,
+        "bootstrap_enable_architecture_contrasts": true,
+        "bootstrap_architecture_reference": {
+            "encoder_layers": 4,
+            "decoder_layers": 4
+        },
+        "bootstrap_architecture_comparators": [
+            {
+                "encoder_layers": 6,
+                "decoder_layers": 2
+            },
+            {
+                "encoder_layers": 2,
+                "decoder_layers": 6
+            }
+        ],
+        "bootstrap_architecture_conditions": [
+            {
+                "stage": "base",
+                "domain": "biblical"
+            },
+            {
+                "stage": "finetuned",
+                "domain": "conversational"
+            }
+        ]
+    },
+    "evaluation_config": {
+        "data_split_seed": 1989,
+        "experiment_seed": 111,
+        "src": "spa",
+        "tgt": "aym",
+        "experiment_seeds": [
+            111,
+            222,
+            333
+        ],
+        "experiment_directions": [
+            {
+                "src": "aym",
+                "tgt": "spa"
+            },
+            {
+                "src": "spa",
+                "tgt": "aym"
+            }
+        ],
+        "experiment_architectures": [
+            {
+                "encoder_layers": 4,
+                "decoder_layers": 4
+            },
+            {
+                "encoder_layers": 6,
+                "decoder_layers": 2
+            },
+            {
+                "encoder_layers": 2,
+                "decoder_layers": 6
+            }
+        ],
+        "deterministic_training": true,
+        "raw_bible_data_dir": "data/raw/bible",
+        "raw_pdf_dir": "data/raw/book",
+        "interim_data_dir": "data/interim",
+        "clean_data_dir": "data/clean",
+        "splits_dir": "data/splits",
+        "tokenizer_dir": "tokenizer",
+        "tokenized_dir": "data/tokenized",
+        "models_dir": "models",
+        "results_dir": "results",
+        "bibles": [
+            {
+                "code": 293,
+                "lang": "aym"
+            },
+            {
+                "code": 2250,
+                "lang": "aym"
+            },
+            {
+                "code": 4278,
+                "lang": "spa"
+            },
+            {
+                "code": 146,
+                "lang": "spa"
+            }
+        ],
+        "min_words_bible": 2,
+        "min_words_book": 1,
+        "max_words": 70,
+        "max_ratio": 3.5,
+        "bible_train_ratio": 0.9,
+        "bible_val_ratio": 0.05,
+        "bible_test_ratio": 0.05,
+        "book_train_ratio": 0.7,
+        "book_val_ratio": 0.15,
+        "book_test_ratio": 0.15,
+        "vocab_size": 8000,
+        "model_type": "bpe",
+        "character_coverage": 1.0,
+        "d_model": 256,
+        "n_heads": 8,
+        "encoder_layers": 2,
+        "decoder_layers": 6,
+        "dim_feedforward": 1024,
+        "positional_encoding_max_len": 1000,
+        "base_epochs": 150,
+        "base_batch_size_cuda": 64,
+        "base_batch_size_cpu": 32,
+        "base_shuffle_train": true,
+        "base_drop_last": false,
+        "base_dropout": 0.2,
+        "base_weight_init": "xavier_uniform",
+        "base_optimizer": "adamw",
+        "base_max_learning_rate": 0.0005,
+        "base_adam_beta1": 0.9,
+        "base_adam_beta2": 0.98,
+        "base_adam_eps": 1e-09,
+        "base_weight_decay": 0.0001,
+        "base_label_smoothing": 0.1,
+        "base_grad_clip_norm": 1.0,
+        "base_scheduler": "onecycle",
+        "base_scheduler_pct_start": 0.1,
+        "base_scheduler_anneal_strategy": "cos",
+        "base_scheduler_div_factor": 25.0,
+        "base_scheduler_final_div_factor": 10000.0,
+        "base_scheduler_three_phase": false,
+        "base_scheduler_cycle_momentum": true,
+        "base_scheduler_base_momentum": 0.85,
+        "base_scheduler_max_momentum": 0.95,
+        "base_amp_enabled": true,
+        "base_num_workers": 0,
+        "base_pin_memory": true,
+        "base_val_metric_interval_epochs": 10,
+        "base_val_max_len": 150,
+        "base_checkpoint_metric": "chrf++",
+        "base_test_max_len": 150,
+        "ft_epochs": 30,
+        "ft_batch_size_cuda": 16,
+        "ft_batch_size_cpu": 16,
+        "ft_shuffle_train": true,
+        "ft_drop_last": false,
+        "ft_optimizer": "adamw",
+        "ft_learning_rate": 0.0001,
+        "ft_adam_beta1": 0.9,
+        "ft_adam_beta2": 0.98,
+        "ft_adam_eps": 1e-09,
+        "ft_weight_decay": 0.0001,
+        "ft_label_smoothing": 0.1,
+        "ft_grad_clip_norm": 1.0,
+        "ft_scheduler": "cosine",
+        "ft_scheduler_eta_min": 1e-06,
+        "ft_scheduler_step_unit": "optimizer_step",
+        "ft_amp_enabled": true,
+        "ft_num_workers": 0,
+        "ft_pin_memory": true,
+        "ft_val_metric_interval_epochs": 2,
+        "ft_val_max_len": 150,
+        "ft_checkpoint_metric": "chrf++",
+        "ft_test_max_len": 150,
+        "ct_subset_size": 1128,
+        "ct_subset_seed": 1989,
+        "ct_budget_source": "finetuned_checkpoint",
+        "ct_batch_size_cuda": 16,
+        "ct_batch_size_cpu": 16,
+        "ct_shuffle_train": true,
+        "ct_drop_last": false,
+        "ct_optimizer": "adamw",
+        "ct_learning_rate": 0.0001,
+        "ct_adam_beta1": 0.9,
+        "ct_adam_beta2": 0.98,
+        "ct_adam_eps": 1e-09,
+        "ct_weight_decay": 0.0001,
+        "ct_label_smoothing": 0.1,
+        "ct_grad_clip_norm": 1.0,
+        "ct_scheduler": "cosine",
+        "ct_scheduler_eta_min": 1e-06,
+        "ct_scheduler_step_unit": "optimizer_step",
+        "ct_amp_enabled": true,
+        "ct_num_workers": 0,
+        "ct_pin_memory": true,
+        "ct_test_max_len": 150,
+        "bootstrap_replicates": 5000,
+        "bootstrap_confidence_level": 0.95,
+        "bootstrap_seed": 1989,
+        "bootstrap_expected_sacrebleu_version": "2.6.0",
+        "bootstrap_metric_validation_tolerance": 1e-09,
+        "bootstrap_output_subdir": "bootstrap",
+        "bootstrap_output_prefix": "bootstrap_summary",
+        "bootstrap_resampling_units": {
+            "biblical": "usfm_code",
+            "conversational": "example_index"
+        },
+        "bootstrap_adaptation_domains": [
+            "biblical",
+            "conversational"
+        ],
+        "bootstrap_enable_adaptation_contrasts": true,
+        "bootstrap_enable_architecture_contrasts": true,
+        "bootstrap_architecture_reference": {
+            "encoder_layers": 4,
+            "decoder_layers": 4
+        },
+        "bootstrap_architecture_comparators": [
+            {
+                "encoder_layers": 6,
+                "decoder_layers": 2
+            },
+            {
+                "encoder_layers": 2,
+                "decoder_layers": 6
+            }
+        ],
+        "bootstrap_architecture_conditions": [
+            {
+                "stage": "base",
+                "domain": "biblical"
+            },
+            {
+                "stage": "finetuned",
+                "domain": "conversational"
+            }
+        ]
+    }
+}
