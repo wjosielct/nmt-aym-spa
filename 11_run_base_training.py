@@ -353,8 +353,7 @@ def _load_experiment_grid(
             )
 
         # ----------------------------------------------------------------------
-        # The paper studies encoder-decoder allocation under a fixed
-        # eight-layer budget.
+        # Enforce the fixed eight-layer encoder-decoder depth budget.
         # ----------------------------------------------------------------------
 
         if (

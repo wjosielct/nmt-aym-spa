@@ -229,7 +229,7 @@ def _atomic_predictions_tsv_dump(
     Writes per-example references and hypotheses to a UTF-8 TSV file
     through a temporary file and atomically replaces the destination.
 
-    The row index is preserved explicitly so that future paired bootstrap
+    The row index is preserved explicitly so that paired-bootstrap
     comparisons can resample the same test examples across systems.
     """
 
@@ -804,8 +804,8 @@ def evaluate_base_model(
         cfg["deterministic_training"]
     )
 
-    # Use the same deterministic policy requested by the
-    # corresponding training experiment.
+    # Use the same deterministic policy as the corresponding
+    # training experiment.
     set_seed(
         seed=experiment_seed,
         deterministic=deterministic_training,

@@ -214,8 +214,8 @@ def _read_protocol(cfg: dict[str, Any]) -> dict[str, Any]:
 
     replicates = int(cfg["bootstrap_replicates"])
     if replicates < 1000:
-        # The final protocol requested by the review uses 1,000–5,000 replicates.
-        # Smoke scripts may explicitly override this value in a temporary config.
+        # Lower replicate counts remain permitted for explicitly overridden
+        # validation configurations.
         pass
     if replicates <= 0:
         raise ValueError("bootstrap_replicates must be greater than zero.")
@@ -931,8 +931,7 @@ def paired_bootstrap(
     }
 
 
-# Backward-compatible alias retained for any local code that imported the
-# earlier function name during smoke development.
+# Backward-compatible alias for the earlier public function name.
 paired_group_bootstrap = paired_bootstrap
 
 

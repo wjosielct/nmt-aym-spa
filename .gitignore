@@ -119,8 +119,8 @@ results/e2e_simulation/
 # splitting, and tokenization code required to reconstruct the datasets from
 # their respective original sources.
 #
-# A data README will document the original sources, edition identifiers,
-# acquisition instructions, and preprocessing procedure.
+# Source information, rights notes, and reconstruction instructions are
+# documented in data/README.md.
 
 
 # ------------------------------------------------------------------------------

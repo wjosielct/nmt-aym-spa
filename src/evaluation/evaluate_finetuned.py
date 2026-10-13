@@ -222,7 +222,7 @@ def _atomic_predictions_tsv_dump(
 ) -> None:
     """
     Writes exact scoring references/hypotheses to a TSV for
-    future paired bootstrap analysis.
+    paired-bootstrap analysis.
     """
 
     if len(
@@ -710,7 +710,7 @@ def evaluate_finetuned_model(
            target-domain performance.
 
     Exact references/hypotheses are exported for the
-    future paired-bootstrap analysis.
+    paired-bootstrap analysis.
     """
 
     script_start_time = (

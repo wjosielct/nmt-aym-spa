@@ -10,11 +10,11 @@ The project implements a compact Transformer encoder-decoder pipeline trained fr
 
 The repository also includes a size-matched continued-training control and paired bootstrap confidence intervals for prespecified system comparisons.
 
-> **Repository status.** The definitive experimental pipeline has been completed and the lightweight scientific result artifacts are publicly versioned. The repository also includes the post-hoc inference benchmark and a deterministic generator for the LaTeX tables used in the manuscript. Corpus text, prediction TSV files, and model checkpoints remain excluded from public version control.
+> **Repository status.** The experimental pipeline has been completed and the lightweight scientific result artifacts are publicly versioned. The repository also includes a standardized inference benchmark and a deterministic generator for reproducible LaTeX result tables. Corpus text, prediction TSV files, and model checkpoints remain excluded from public version control.
 
 ## Research scope
 
-This repository is intended to support a **controlled characterization study of compact Transformers trained from scratch** for Aymara–Spanish NMT. It is not designed as a state-of-the-art benchmark against large pretrained multilingual translation systems.
+This repository supports a **controlled characterization study of compact Transformers trained from scratch** for Aymara–Spanish NMT. It is not designed as a state-of-the-art benchmark against large pretrained multilingual translation systems.
 
 The configured model grid contains three encoder-decoder depth allocations while preserving a fixed total depth of eight layers:
 
@@ -26,7 +26,7 @@ The configured model grid contains three encoder-decoder depth allocations while
 
 Because encoder and decoder layers do not have identical parameter costs, these configurations should be interpreted as **fixed total-depth / fixed eight-layer-budget allocations**, not as exactly parameter-matched models.
 
-The definitive experiment grid uses:
+The experiment grid uses:
 
 - model seeds: `111`, `222`, `333`;
 - translation directions: `aym -> spa`, `spa -> aym`;
@@ -113,7 +113,7 @@ The end-to-end pipeline was validated in the following local environment:
 - Windows 11;
 - NVIDIA GeForce RTX 2050, 4 GB VRAM.
 
-The definitive paper runs may be executed on different compatible hardware. Each training/evaluation artifact records environment, configuration, hashes, and Git metadata when available.
+Each training/evaluation artifact records environment, configuration, hashes, and Git metadata when available.
 
 ### Installation
 
@@ -139,7 +139,7 @@ All experimental settings are centralized in:
 config.yaml
 ```
 
-The current definitive configuration specifies:
+The configured protocol specifies:
 
 - data split seed: `1989`;
 - model seeds: `111`, `222`, `333`;
@@ -149,9 +149,7 @@ The current definitive configuration specifies:
 - conversational fine-tuning epochs: `30`;
 - greedy decoding with maximum generation length `150`;
 - paired bootstrap confidence intervals with `5000` replicates and 95% confidence level;
-- post-hoc inference benchmarking with batch size `1`, FP32, greedy decoding, and `max_len=150`.
-
-Do not modify the definitive configuration while final experimental runs are in progress if exact Git/configuration provenance is required.
+- inference benchmarking with batch size `1`, FP32, greedy decoding, and `max_len=150`.
 
 ## Data preparation
 
@@ -195,7 +193,7 @@ SentencePiece.model
 python 11_run_base_training.py
 ```
 
-The runner executes the configured Cartesian grid of directions, architectures, and model seeds. The definitive configuration contains 18 base runs.
+The runner executes the configured Cartesian grid of directions, architectures, and model seeds. The configuration contains 18 base runs.
 
 The base model is trained on the biblical training partition. Checkpoint selection uses validation `chrF++`.
 
@@ -262,7 +260,7 @@ The continued-training control is evaluated on both biblical and conversational 
 python 17_bootstrap_analysis.py
 ```
 
-The final statistical analysis uses paired bootstrap resampling with:
+The statistical analysis uses paired bootstrap resampling with:
 
 - `5000` replicates;
 - 95% percentile confidence intervals;
@@ -281,7 +279,7 @@ Model-seed variability and test-set resampling uncertainty are treated separatel
 - model-seed variability is summarized across seeds using mean ± sample standard deviation;
 - paired bootstrap intervals quantify uncertainty associated with test-set resampling.
 
-### 8. Post-hoc inference benchmark
+### 8. Inference benchmark
 
 ```bash
 python -m unittest tests.test_inference_benchmark -v
@@ -289,30 +287,16 @@ python 18_benchmark_inference.py --dry-run
 python 18_benchmark_inference.py
 ```
 
-The benchmark does **not** retrain any model. It loads the already selected
-checkpoints and measures only the two prespecified architecture-analysis
-conditions:
+The benchmark does **not** retrain any model. It loads the already selected checkpoints and measures only the two prespecified architecture-analysis conditions:
 
 - **Base → Biblical test**;
 - **Fine-tuned → Conversational test**.
 
-For each condition, both translation directions, all three depth allocations,
-and seeds `111`, `222`, and `333` are benchmarked, for 36 checkpoint/test
-measurements in total.
+For each condition, both translation directions, all three depth allocations, and seeds `111`, `222`, and `333` are benchmarked, for 36 checkpoint/test measurements in total.
 
-The definitive protocol uses batch size `1`, FP32, greedy decoding,
-`max_len=150`, 10 warm-up examples, and one complete measured test-set pass per
-checkpoint. Source tensors are materialized from the tokenized TSV files before
-timing. Architecture order is deterministically rotated across seeds so each
-architecture occupies the first, middle, and last timing position once within
-each stage/direction. Immediately before the measured pass, CUDA is synchronized
-and peak allocated-memory statistics are reset. CUDA is synchronized again
-before the wall-clock timer is stopped.
+The protocol uses batch size `1`, FP32, greedy decoding, `max_len=150`, 10 warm-up examples, and one complete measured test-set pass per checkpoint. Source tensors are materialized from the tokenized TSV files before timing. Architecture order is deterministically rotated across seeds so each architecture occupies the first, middle, and last timing position once within each stage/direction.
 
-The timed region includes CPU-to-GPU transfer of each already-tokenized source
-tensor, encoder computation, and autoregressive greedy decoding. It excludes
-checkpoint loading, TSV parsing, SentencePiece detokenization, BLEU/chrF++
-calculation, and output-file writing.
+The timed region includes CPU-to-GPU transfer of each already-tokenized source tensor, encoder computation, and autoregressive greedy decoding. It excludes checkpoint loading, TSV parsing, SentencePiece detokenization, BLEU/chrF++ calculation, and output-file writing.
 
 Only three primary inference quantities are reported:
 
@@ -320,9 +304,7 @@ Only three primary inference quantities are reported:
 - generated-token throughput in tokens per second;
 - peak allocated CUDA memory in MiB.
 
-Results are summarized as mean ± sample standard deviation across the three
-model seeds. The benchmark writes only lightweight numerical metadata (no
-reference or hypothesis text):
+Results are summarized as mean ± sample standard deviation across the three model seeds. The benchmark writes only lightweight numerical metadata (no reference or hypothesis text):
 
 ```text
 results/inference_benchmark/inference_benchmark_runs.csv
@@ -330,12 +312,9 @@ results/inference_benchmark/inference_benchmark_summary.csv
 results/inference_benchmark/inference_benchmark_summary.json
 ```
 
-For a scientifically comparable run, execute all 36 measurements in the same
-process on the same GPU while avoiding other GPU-heavy workloads. Commit/tag the
-benchmark code before the definitive run so the output JSON records a clean and
-exact Git state.
+For a scientifically comparable run, execute all 36 measurements in the same process on the same GPU while avoiding other GPU-heavy workloads.
 
-### 9. Manuscript table generation
+### 9. LaTeX result table generation
 
 ```bash
 python -m unittest tests.test_paper_tables -v
@@ -343,17 +322,13 @@ python 19_generate_paper_tables.py --dry-run
 python 19_generate_paper_tables.py
 ```
 
-The table generator validates the frozen split structure and the final numerical
-artifacts before writing five LaTeX tables under `paper_tables/`. It recomputes
-seed-level mean ± sample standard deviation, selects the manuscript bootstrap
-contrasts from the complete public bootstrap output, and consumes the final
-inference benchmark summary. Prediction TSV files are never read by the table
-generator, and no corpus text is exported.
+The table generator validates the dataset split structure and the numerical artifacts before writing five LaTeX tables under `paper_tables/`. It recomputes seed-level mean ± sample standard deviation, selects the configured bootstrap contrasts from the complete public bootstrap output, and consumes the inference benchmark summary. Prediction TSV files are never read by the table generator, and no corpus text is exported.
 
-The generated tables are intended to be included directly from Overleaf using
-`\input{...}`. If regeneration is necessary after the files already exist, use
-`python 19_generate_paper_tables.py --force` and review the generated manifest
-before replacing manuscript tables.
+Existing table outputs are protected against accidental overwrite. Intentional regeneration can be performed with:
+
+```bash
+python 19_generate_paper_tables.py --force
+```
 
 ## Evaluation
 
@@ -406,22 +381,16 @@ Prediction TSV files are not intended for public versioning because they include
 
 ## Results
 
-The lightweight scientific artifacts supporting the manuscript are publicly
-versioned under `results/`. They include per-run base/fine-tuned/continued-control
-JSON metrics and training summaries/histories, the complete paired-bootstrap
-summary, and the standardized inference-benchmark summaries. Prediction TSV files
-remain intentionally excluded because they contain reference text derived from
-third-party research corpora.
+The lightweight scientific artifacts supporting the reported results are publicly versioned under `results/`. They include per-run base/fine-tuned/continued-control JSON metrics and training summaries/histories, the complete paired-bootstrap summary, and the standardized inference-benchmark summaries. Prediction TSV files remain intentionally excluded because they contain reference text derived from third-party research corpora.
 
 The principal provenance snapshots are:
 
-- `ijai-experiments-v2` (`3c367bd9a46175907279c1641375fb35666d45d9`) — definitive training, evaluation, continued-control, and bootstrap experimental code;
-- `ijai-inference-benchmark-v1` (`cda1642a6a490d478f45550bde49b92f1e6946a0`) — standardized post-hoc inference benchmark code;
-- `ijai-public-results-v1` (`8f747947f42771179793141230bf3a843a2e5fd2`) — public lightweight scientific result artifacts.
+- `ijai-experiments-v2` (`3c367bd9a46175907279c1641375fb35666d45d9`) — training, evaluation, continued-control, and bootstrap experimental code;
+- `ijai-inference-benchmark-v1` (`cda1642a6a490d478f45550bde49b92f1e6946a0`) — standardized inference benchmark code;
+- `ijai-public-results-v1` (`8f747947f42771179793141230bf3a843a2e5fd2`) — public lightweight scientific result artifacts;
+- `ijai-paper-tables-v1` (`c68025c633db04ac8b91cddc21215975bd1171e8`) — reproducible LaTeX result-table generation.
 
-The manuscript tables are generated deterministically from these final artifacts
-with `19_generate_paper_tables.py`; the generated `table_generation_manifest.json`
-records SHA-256 hashes of the numerical/source inputs and produced `.tex` files.
+The LaTeX result tables are generated deterministically from these final artifacts with `19_generate_paper_tables.py`; the generated `table_generation_manifest.json` records SHA-256 hashes of the numerical/source inputs and produced `.tex` files.
 
 ## License
 

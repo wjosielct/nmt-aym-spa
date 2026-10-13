@@ -607,7 +607,7 @@ def _validate_finetuning_config(
         raise ValueError(
             "ft_scheduler_step_unit must be "
             "'optimizer_step'. This is explicit so the "
-            "future continued-training control can match "
+            "continued-training control can match "
             "the optimization budget exactly."
         )
 

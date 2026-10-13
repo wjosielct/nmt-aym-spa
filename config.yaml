@@ -208,9 +208,9 @@ base_test_max_len: 150
 # model parameters on train_dialogue_tokenized.tsv. Validation uses only
 # val_dialogue_tokenized.tsv. Test sets are not accessed by fine_tune.py.
 #
-# The optimization budget and LR schedule are explicit because later
-# do a size-matched biblical continued-training control with the same batch
-# size, number of optimizer steps, and LR trajectory.
+# The optimization budget and LR schedule are explicit so that the
+# size-matched biblical continued-training control uses the same batch size,
+# number of optimizer steps, and LR trajectory.
 
 # ------------------------------------------------------------------------------
 # Training duration
@@ -370,7 +370,7 @@ ct_test_max_len: 150
 # complete dialogue groups for the conversational test set rather than treating
 # aligned edition variants / turns as independent observations.
 
-# Final analysis uses the upper end of the reviewer-requested 1,000–5,000 range.
+# Final analysis uses 5,000 bootstrap replicates.
 bootstrap_replicates: 5000
 bootstrap_confidence_level: 0.95
 bootstrap_seed: 1989
