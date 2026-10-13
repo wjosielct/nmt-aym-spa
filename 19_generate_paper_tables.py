@@ -11,8 +11,8 @@ from src.analysis.paper_tables import generate_paper_tables
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Generate the five LaTeX tables used by the IJ-AI manuscript from "
-            "the frozen dataset splits and final public result artifacts."
+            "Generate five reproducible LaTeX result tables from the "
+            "validated dataset splits and public result artifacts."
         )
     )
     parser.add_argument(

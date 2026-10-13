@@ -1,6 +1,6 @@
 {
   "generator": "19_generate_paper_tables.py",
-  "generator_version": "1.1",
+  "generator_version": "1.2",
   "experiment_seeds": [
     111,
     222,
@@ -137,7 +137,7 @@
     "table_1_dataset_partitions.tex": "b18b0d8f5bb46fb562d7cd0bbf40f7915c2835d7b82dfbc32ab5c2992e0128a3",
     "table_2_model_training_protocol.tex": "e2b9ee30009fa40e083066c85e0f413d2a0f36d351e6492a65bfa7d6d71f0b8e",
     "table_3_translation_performance.tex": "5c57011851f5fad89d49ef574bf8d45694fdd4a3c30963faa110b07dc2e64a12",
-    "table_4_primary_bootstrap_contrasts.tex": "a78fe676fba209d79170f01fbb64d02a06c3db23336094570714affd9dd40b30",
+    "table_4_primary_bootstrap_contrasts.tex": "f96ffced07eabfbc443f53d00987bb0490dbcf284aeefb79f267cec9aca2306f",
     "table_5_inference_efficiency.tex": "3e2e73812f3f3c5534a126e9df22f09c3196c89cfe14150554084e1d55a2e9c3"
   }
 }

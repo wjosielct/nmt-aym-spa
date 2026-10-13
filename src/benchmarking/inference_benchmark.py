@@ -5,8 +5,8 @@
 """Post-hoc inference benchmark for the fixed eight-layer NMT study.
 
 The benchmark is intentionally narrow. It compares inference cost across the
-three encoder-decoder depth allocations under the two architecture conditions
-used in the paper's primary architecture analysis:
+three encoder-decoder depth allocations under the two prespecified
+architecture-analysis conditions:
 
     1) base checkpoints on the biblical test set;
     2) fine-tuned checkpoints on the conversational test set.
