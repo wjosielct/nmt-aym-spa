@@ -10,7 +10,7 @@ The project implements a compact Transformer encoder-decoder pipeline trained fr
 
 The repository also includes a size-matched continued-training control and paired bootstrap confidence intervals for prespecified system comparisons.
 
-> **Repository status.** The code path has been validated end to end. The definitive experimental results, exact Git commit/tag, execution evidence, and final result summaries will be added after the final paper runs are completed.
+> **Repository status.** The definitive experimental pipeline has been completed and the lightweight scientific result artifacts are publicly versioned. The repository also includes the post-hoc inference benchmark and a deterministic generator for the LaTeX tables used in the manuscript. Corpus text, prediction TSV files, and model checkpoints remain excluded from public version control.
 
 ## Research scope
 
@@ -71,11 +71,17 @@ nmt-aym-spa/
 ├── 16_run_continued_control_evaluation.py
 ├── 17_bootstrap_analysis.py
 ├── 18_benchmark_inference.py
+├── 19_generate_paper_tables.py
 ├── config.yaml
 ├── requirements.txt
 ├── LICENSE
 ├── data/
 │   └── README.md
+├── paper_tables/
+│   └── README.md
+├── results/
+│   ├── bootstrap/
+│   └── inference_benchmark/
 ├── src/
 │   ├── analysis/
 │   ├── benchmarking/
@@ -329,6 +335,26 @@ process on the same GPU while avoiding other GPU-heavy workloads. Commit/tag the
 benchmark code before the definitive run so the output JSON records a clean and
 exact Git state.
 
+### 9. Manuscript table generation
+
+```bash
+python -m unittest tests.test_paper_tables -v
+python 19_generate_paper_tables.py --dry-run
+python 19_generate_paper_tables.py
+```
+
+The table generator validates the frozen split structure and the final numerical
+artifacts before writing five LaTeX tables under `paper_tables/`. It recomputes
+seed-level mean ± sample standard deviation, selects the manuscript bootstrap
+contrasts from the complete public bootstrap output, and consumes the final
+inference benchmark summary. Prediction TSV files are never read by the table
+generator, and no corpus text is exported.
+
+The generated tables are intended to be included directly from Overleaf using
+`\input{...}`. If regeneration is necessary after the files already exist, use
+`python 19_generate_paper_tables.py --force` and review the generated manifest
+before replacing manuscript tables.
+
 ## Evaluation
 
 All reported final evaluations use greedy autoregressive decoding.
@@ -380,16 +406,22 @@ Prediction TSV files are not intended for public versioning because they include
 
 ## Results
 
-The definitive paper results are intentionally not hard-coded into this README yet.
+The lightweight scientific artifacts supporting the manuscript are publicly
+versioned under `results/`. They include per-run base/fine-tuned/continued-control
+JSON metrics and training summaries/histories, the complete paired-bootstrap
+summary, and the standardized inference-benchmark summaries. Prediction TSV files
+remain intentionally excluded because they contain reference text derived from
+third-party research corpora.
 
-After the final experiment grid is completed, this section will be updated with:
+The principal provenance snapshots are:
 
-- the exact public Git commit and release tag;
-- the definitive execution environment;
-- final aggregate BLEU and chrF++ results;
-- seed variability summaries;
-- paired bootstrap 95% confidence intervals;
-- links to the lightweight JSON/CSV result artifacts used to support the paper tables.
+- `ijai-experiments-v2` (`3c367bd9a46175907279c1641375fb35666d45d9`) — definitive training, evaluation, continued-control, and bootstrap experimental code;
+- `ijai-inference-benchmark-v1` (`cda1642a6a490d478f45550bde49b92f1e6946a0`) — standardized post-hoc inference benchmark code;
+- `ijai-public-results-v1` (`8f747947f42771179793141230bf3a843a2e5fd2`) — public lightweight scientific result artifacts.
+
+The manuscript tables are generated deterministically from these final artifacts
+with `19_generate_paper_tables.py`; the generated `table_generation_manifest.json`
+records SHA-256 hashes of the numerical/source inputs and produced `.tex` files.
 
 ## License
 
